@@ -58,7 +58,7 @@ background = canvas.create_image(
     355.5, 323.0,
     image=background_img)
 
-img0 = PhotoImage(file = f"janela/img0.png")
+img0 = PhotoImage(file = f"janela/imgbg_search.png")
 b0 = Button(
     image = img0,
     borderwidth = 0,
@@ -68,10 +68,10 @@ b0 = Button(
 
 b0.place(
     x = 479, y = 195,
-    width = 178,
-    height = 38)
+    width = 50,
+    height = 53)
 
-img1 = PhotoImage(file = f"janela/img1.png")
+img1 = PhotoImage(file = f"janela/imgbg_delete.png")
 b1 = Button(
     image = img1,
     borderwidth = 0,
@@ -80,11 +80,11 @@ b1 = Button(
     relief = "flat")
 
 b1.place(
-    x = 247, y = 197,
-    width = 178,
-    height = 36)
+    x =270, y = 181,
+    width = 40,
+    height = 46)
 
-img2 = PhotoImage(file = f"janela/img2.png")
+img2 = PhotoImage(file = f"janela/imgbg_edit.png")
 b2 = Button(
     image = img2,
     borderwidth = 0,
@@ -94,10 +94,10 @@ b2 = Button(
 
 b2.place(
     x = 479, y = 123,
-    width = 178,
-    height = 35)
+    width = 50,
+    height = 50)
 
-img3 = PhotoImage(file = f"janela/img3.png")
+img3 = PhotoImage(file = f"janela/imgbg_add.png")
 b3 = Button(
     image = img3,
     borderwidth = 0,
@@ -107,8 +107,8 @@ b3 = Button(
 
 b3.place(
     x = 247, y = 125,
-    width = 178,
-    height = 34)
+    width = 49,
+    height = 53)
 
 entry0_img = PhotoImage(file = f"janela/img_textBox0.png")
 entry0_bg = canvas.create_image(
