@@ -1,19 +1,30 @@
 from tkinter import *
 
 ######## funcionalidades do sistema #############
+import sqlite3
+
+conn = sqlite3.connect('Estoque.db')
+cursor = conn.cursor()
+
+
+
+
 
 def adicionar_insumo():
-    print(caixa_texto.get('1.0', END))
-    print(nome_insumo.get())
-    print(data_insumo.get())
-    print(lote_insumo.get())
-    print(qtde_insumo.get())
-    
+
+    cursor.execute(f"""
+    INSERT INTO Estoque(Produto,Quantidade,DataValidade,Lote)
+    VALUES
+    ("{nome_insumo.get()}", {qtde_insumo.get()}, "{data_insumo.get()}", {lote_insumo.get()})
+    """)
+    conn.commit()
+
+
     # deletar tudo da caixa de texto
     caixa_texto.delete("1.0", END)
     
     # escrever na caixa de texto
-    caixa_texto.insert("1.0", "Texto")
+    caixa_texto.insert("1.0", f"{nome_insumo.get()} adicionado com sucesso!")
     
 def deletar_insumo():
     print("deletar_insumo")
@@ -176,3 +187,6 @@ qtde_insumo.place(
 
 window.resizable(False, False)
 window.mainloop()
+
+cursor.close()
+conn.close()
