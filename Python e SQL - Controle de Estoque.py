@@ -67,7 +67,7 @@ b0 = Button(
     relief = "flat")
 
 b0.place(
-    x = 479, y = 195,
+    x = 61, y = 326,
     width = 50,
     height = 53)
 
@@ -80,7 +80,7 @@ b1 = Button(
     relief = "flat")
 
 b1.place(
-    x =270, y = 181,
+    x = 63, y = 397,
     width = 40,
     height = 46)
 
@@ -93,7 +93,7 @@ b2 = Button(
     relief = "flat")
 
 b2.place(
-    x = 479, y = 123,
+    x = 61, y = 258,
     width = 50,
     height = 50)
 
@@ -106,7 +106,7 @@ b3 = Button(
     relief = "flat")
 
 b3.place(
-    x = 247, y = 125,
+    x = 61, y = 190,
     width = 49,
     height = 53)
 
