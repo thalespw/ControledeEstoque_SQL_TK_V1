@@ -1,7 +1,9 @@
 from tkinter import *
+from tkinter import messagebox
 
 ######## funcionalidades do sistema #############
 import sqlite3
+import time
 
 conn = sqlite3.connect('Estoque.db')
 cursor = conn.cursor()
@@ -23,14 +25,32 @@ def adicionar_insumo():
     # deletar tudo da caixa de texto
     caixa_texto.delete("1.0", END)
     
-    # escrever na caixa de texto
-    caixa_texto.insert("1.0", f"{nome_insumo.get()} adicionado com sucesso!")
+    messagebox.showinfo("ADICIONAR",f"{nome_insumo} adicionado com sucesso!")
+    lote_insumo.delete(0,END)
+    data_insumo.delete(0,END)
+    qtde_insumo.delete(0,END)
+    nome_insumo.delete(0,END)
     
 def deletar_insumo():
     print("deletar_insumo")
-
+    if len(nome_insumo.get()) < 2:
+        messagebox.showerror("ERRO","Produto Inválido")
+        nome_insumo.delete(0,END)
+        return
+    
+    cursor.execute(f"""
+    DELETE FROM Estoque
+    WHERE Produto = "{nome_insumo.get()}"
+    """)
+    conn.commit()
+    messagebox.showinfo("EXCLUSÃO",f"{nome_insumo.get()} excluído com sucesso!")
+    nome_insumo.delete(0,END)
+    
 def consumir_insumo():
-    print("consumir_insumo")
+    if len(nome_insumo.get()) < 2 or len(lote_insumo.get()) < 1:
+        messagebox.showerror("ERRO","Informe corretamente o Produto e Lote")
+        lote_insumo.delete(0,END)
+        nome_insumo.delete(0,END)
 
 def visualizar_insumo():
     print("visualizar_insumo")
