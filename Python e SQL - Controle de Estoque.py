@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkcalendar import DateEntry
 
 ######## funcionalidades do sistema #############
 import sqlite3
@@ -11,25 +12,27 @@ cursor = conn.cursor()
 
 
 
-
-def adicionar_insumo():
-
-    cursor.execute(f"""
-    INSERT INTO Estoque(Produto,Quantidade,DataValidade,Lote)
-    VALUES
-    ("{nome_insumo.get()}", {qtde_insumo.get()}, "{data_insumo.get()}", {lote_insumo.get()})
-    """)
-    conn.commit()
-
-
-    # deletar tudo da caixa de texto
-    caixa_texto.delete("1.0", END)
-    
-    messagebox.showinfo("ADICIONAR",f"{nome_insumo} adicionado com sucesso!")
+def limpar_tela():
     lote_insumo.delete(0,END)
     data_insumo.delete(0,END)
     qtde_insumo.delete(0,END)
     nome_insumo.delete(0,END)
+
+def carregar_ultimo():
+    limpar_tela()
+    cursor.execute("SELECT Produto, Quantidade, DataValidade, Lote FROM Estoque ORDER BY id DESC LIMIT 1")
+    ultimo = cursor.fetchone()
+
+    if ultimo:
+        nome_insumo.insert(0, ultimo[0])
+        lote_insumo.insert(0, ultimo[3])
+        qtde_insumo.insert(0, str(ultimo[1]))
+        data_insumo.set_date(ultimo[2])
+
+def adicionar_insumo():
+    limpar_tela()
+    b4.config(state="normal")
+    
     
 def deletar_insumo():
     print("deletar_insumo")
@@ -53,14 +56,26 @@ def consumir_insumo():
         nome_insumo.delete(0,END)
 
 def visualizar_insumo():
-    print("visualizar_insumo")
+    carregar_ultimo()
 
+def salvar_add():
+    cursor.execute(f"""
+    INSERT INTO Estoque(Produto,Quantidade,DataValidade,Lote)
+    VALUES
+    ("{nome_insumo.get()}", {qtde_insumo.get()}, "{data_insumo.get()}", {lote_insumo.get()})
+    """)
+    conn.commit()
+    caixa_texto.delete("1.0", END)
+    
+    messagebox.showinfo("ADICIONAR",f"{nome_insumo.get()} adicionado com sucesso!")
+    b4.config(state="disable")
+    limpar_tela()
     
     
 ######### criação da Janela ##################
     
 window = Tk()
-
+window.iconbitmap(r"C:\net\hashtag\ControledeEstoque_SQL_TK_V1\janela\mann.ico")
 window.geometry("711x646")
 window.configure(bg = "#ffffff")
 canvas = Canvas(
@@ -130,6 +145,20 @@ b3.place(
     width = 49,
     height = 53)
 
+img4 = PhotoImage(file = f"janela/img_check.png")
+b4 = Button(
+    image = img1,
+    borderwidth = 0,
+    highlightthickness = 0,
+    command = salvar_add,
+    relief = "flat")
+
+b4.place(
+    x = 69, y = 550,
+    width = 40,
+    height = 46)
+b4.config(state="disable")
+
 entry0_img = PhotoImage(file = f"janela/img_textBox0.png")
 entry0_bg = canvas.create_image(
     455.0, 560.0,
@@ -165,7 +194,7 @@ entry2_bg = canvas.create_image(
     517.0, 340.5,
     image = entry2_img)
 
-data_insumo = Entry(
+data_insumo = DateEntry(
     bd = 0,
     bg = "#ffffff",
     highlightthickness = 0)
@@ -204,6 +233,10 @@ qtde_insumo.place(
     x = 377, y = 420,
     width = 280,
     height = 31)
+
+
+
+carregar_ultimo()
 
 window.resizable(False, False)
 window.mainloop()
