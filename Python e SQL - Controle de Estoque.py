@@ -31,7 +31,7 @@ def carregar_ultimo():
 
 def adicionar_insumo():
     limpar_tela()
-    b4.config(state="normal")
+    mostrar_botao_salvar_add()
     
     
 def deletar_insumo():
@@ -39,6 +39,7 @@ def deletar_insumo():
     if len(nome_insumo.get()) < 2:
         messagebox.showerror("ERRO","Produto Inválido")
         nome_insumo.delete(0,END)
+        carregar_ultimo()
         return
     
     cursor.execute(f"""
@@ -48,12 +49,72 @@ def deletar_insumo():
     conn.commit()
     messagebox.showinfo("EXCLUSÃO",f"{nome_insumo.get()} excluído com sucesso!")
     nome_insumo.delete(0,END)
+
+def editar():
+    b5.config(state="normal")
+
+def salvar_edit():
+    produto_original = nome_insumo.get()
+    lote_original = lote_insumo.get()
+    print(produto_original)
+    print(lote_original)
+    return
+
+
+def abrir_janela_pesquisa():
+    # Cria uma nova janela independente (filha da principal)
+    janela_pesquisa = Toplevel(window)
+    janela_pesquisa.title("Pesquisar Produto")
+    janela_pesquisa.geometry("300x200")
+    janela_pesquisa.configure(bg="#555555")
+    janela_pesquisa.resizable(False, False)
+
+    # Faz a janela ficar modal e sempre na frente
+    janela_pesquisa.transient(window)   # filha da janela principal
+    janela_pesquisa.grab_set()          # bloqueia a principal enquanto aberta
+    janela_pesquisa.focus_force()       # coloca o foco nessa janela
+
+    # Label e Entry para nome do produto
+    Label(janela_pesquisa, text="Nome do Produto:",fg="#ffffff", bg="#555555").place(x=20, y=30)
+    entry_nome = Entry(janela_pesquisa, width=30)
+    entry_nome.place(x=20, y=50)
+
+    # Label e Entry para lote
+    Label(janela_pesquisa, text="Lote:", fg="#ffffff", bg="#555555").place(x=20, y=90)
+    entry_lote = Entry(janela_pesquisa, width=30)
+    entry_lote.place(x=20, y=110)
+
+    # Função interna que será ligada ao botão "Pesquisar"
+   
+    def pesquisar():
+        nome = entry_nome.get().strip()
+        lote = entry_lote.get().strip()
     
-def consumir_insumo():
-    if len(nome_insumo.get()) < 2 or len(lote_insumo.get()) < 1:
-        messagebox.showerror("ERRO","Informe corretamente o Produto e Lote")
-        lote_insumo.delete(0,END)
-        nome_insumo.delete(0,END)
+        if len(nome) < 2 or len(lote) < 1:
+            messagebox.showerror("ERRO","Informe corretamente o Produto e Lote")
+            return
+        cursor.execute(f"""
+        SELECT Produto, Quantidade, DataValidade, Lote 
+        FROM Estoque 
+        WHERE Produto = ? AND Lote = ?
+        """, (nome, lote))
+
+        resultado = cursor.fetchone()
+        if resultado is None:
+            messagebox.showerror("ERRO", f"Produto {nome} não encontrado.")
+            return
+        limpar_tela()
+        nome_insumo.insert(0, resultado[0])
+        lote_insumo.insert(0, resultado[3])
+        qtde_insumo.insert(0, str(resultado[1]))
+        data_insumo.set_date(resultado[2])
+
+        janela_pesquisa.destroy()
+
+    # Botão de pesquisa
+    Button(janela_pesquisa, text="Pesquisar", command=pesquisar).place(x=110, y=150)
+    
+
 
 def visualizar_insumo():
     carregar_ultimo()
@@ -70,12 +131,24 @@ def salvar_add():
     messagebox.showinfo("ADICIONAR",f"{nome_insumo.get()} adicionado com sucesso!")
     b4.config(state="disable")
     limpar_tela()
-    
+
+#########BOTOES SALVAR - MOSTRAR / ESCONDER    
+def mostrar_botao_salvar_add():
+    b4.place(x=69, y=550, width=40, height=46)
+
+def esconder_botao_salvar_add():
+    b4.place_forget()
+
+def mostrar_botao_salvar_edit():
+    b4.place(x=69, y=550, width=40, height=46)
+
+def esconder_botao_salvar_edit():
+    b4.place_forget()
     
 ######### criação da Janela ##################
     
 window = Tk()
-window.iconbitmap(r"C:\net\hashtag\ControledeEstoque_SQL_TK_V1\janela\mann.ico")
+#window.iconbitmap(r"C:\net\hashtag\ControledeEstoque_SQL_TK_V1\janela\mann.ico")
 window.geometry("711x646")
 window.configure(bg = "#ffffff")
 canvas = Canvas(
@@ -98,7 +171,7 @@ b0 = Button(
     image = img0,
     borderwidth = 0,
     highlightthickness = 0,
-    command = visualizar_insumo,
+    command = abrir_janela_pesquisa,
     relief = "flat")
 
 b0.place(
@@ -124,7 +197,7 @@ b2 = Button(
     image = img2,
     borderwidth = 0,
     highlightthickness = 0,
-    command = consumir_insumo,
+    command = editar,
     relief = "flat")
 
 b2.place(
@@ -145,19 +218,24 @@ b3.place(
     width = 49,
     height = 53)
 
-img4 = PhotoImage(file = f"janela/img_check.png")
+img4 = PhotoImage(file = f"janela/imgcheck.png")
 b4 = Button(
-    image = img1,
+    image = img4,
     borderwidth = 0,
     highlightthickness = 0,
     command = salvar_add,
     relief = "flat")
 
-b4.place(
-    x = 69, y = 550,
-    width = 40,
-    height = 46)
-b4.config(state="disable")
+
+
+img5 = PhotoImage(file = f"janela/imgcheck.png")
+b5 = Button(
+    image = img5,
+    borderwidth = 0,
+    highlightthickness = 0,
+    command = salvar_edit,
+    relief = "flat")
+
 
 entry0_img = PhotoImage(file = f"janela/img_textBox0.png")
 entry0_bg = canvas.create_image(
