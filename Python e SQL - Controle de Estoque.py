@@ -140,10 +140,10 @@ def esconder_botao_salvar_add():
     b4.place_forget()
 
 def mostrar_botao_salvar_edit():
-    b4.place(x=69, y=550, width=40, height=46)
+    b5.place(x=69, y=550, width=40, height=46)
 
 def esconder_botao_salvar_edit():
-    b4.place_forget()
+    b5.place_forget()
     
 ######### criação da Janela ##################
     
