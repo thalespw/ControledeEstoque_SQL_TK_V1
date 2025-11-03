@@ -11,7 +11,7 @@ cursor = conn.cursor()
 
 
 from main_window_tk import criar_interface
-window,canvas,background_img ,nome_insumo, lote_insumo, data_insumo, qtde_insumo, b_search,b_delete,b_edit,b_add,b_save_add,b_save_edit,img0,img1,img2,img3,img4,img5 = criar_interface()
+window,canvas,background_img ,nome_insumo, lote_insumo, data_insumo, qtde_insumo, b_search,b_delete,b_edit,b_add,b_save_add,b_save_edit,b_cancel,img0,img1,img2,img3,img4,img5,img6 = criar_interface()
 
 
 
@@ -40,6 +40,7 @@ def adicionar_insumo():
     limpar_tela()
     habilitar_campos()
     mostrar_botao_salvar_add()
+    mostrar_botao_cancelar()
     nome_insumo.focus()
     
     
@@ -145,7 +146,14 @@ def salvar_add():
     limpar_tela()
     carregar_ultimo()
 
-#########BOTOES SALVAR - MOSTRAR / ESCONDER    
+def cancelar():
+    limpar_tela()
+    carregar_ultimo()
+    esconder_botao_salvar_add()
+    esconder_botao_salvar_edit()
+    esconder_botao_cancelar()
+
+#########BOTOES SALVAR E CANCELAR - MOSTRAR / ESCONDER    
 def mostrar_botao_salvar_add():
     b_save_add.place(x=69, y=550, width=40, height=46)
     nome_insumo.focus()
@@ -158,6 +166,13 @@ def mostrar_botao_salvar_edit():
 
 def esconder_botao_salvar_edit():
     b_save_edit.place_forget()
+
+def mostrar_botao_cancelar():
+    b_cancel.place(x=69, y=490, width=42, height=41)
+
+def esconder_botao_cancelar():
+    b_cancel.place_forget()
+
 ######### HABILITAR/DESABILITAR CAMPOS PARA EDIÇÃO #######
 
 def habilitar_campos():
@@ -180,6 +195,7 @@ b_search.config(command=abrir_janela_pesquisa)
 b_delete.config(command=deletar_insumo)
 b_save_add.config(command=salvar_add)
 b_save_edit.config(command=salvar_edit)
+b_cancel.config(command=cancelar)
     
 def centralizar_janela(janela,largura,altura):
     #pegar a resolução da tela

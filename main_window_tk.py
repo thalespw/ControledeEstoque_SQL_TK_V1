@@ -4,8 +4,6 @@ from tkcalendar import DateEntry
 
 def criar_interface():
     window = Tk()
-    #window.iconbitmap(r"C:\net\hashtag\ControledeEstoque_SQL_TK_V1\janela\mann.ico")
-    window.geometry("711x646")
     window.configure(bg = "#ffffff")
     canvas = Canvas(
         window,
@@ -77,14 +75,20 @@ def criar_interface():
         highlightthickness = 0,
         relief = "flat")
 
-
-
     img5 = PhotoImage(file = f"janela/imgcheck.png")
     b_save_edit = Button(
         image = img5,
         borderwidth = 0,
         highlightthickness = 0,
         relief = "flat")
+    
+    img6 = PhotoImage(file = f"janela/imgbg_cancel.png")
+    b_cancel = Button(
+        image = img6,
+        borderwidth = 0,
+        highlightthickness = 0,
+        relief = "flat")
+
 
     ###### CAIXAS DE TEXTO #############
 
@@ -167,4 +171,4 @@ def criar_interface():
         width = 280,
         height = 31)
 
-    return window,canvas,background_img,nome_insumo, lote_insumo, data_insumo, qtde_insumo, b_search,b_delete,b_edit,b_add,b_save_add,b_save_edit,img0,img1,img2,img3,img4,img5
+    return window,canvas,background_img,nome_insumo, lote_insumo, data_insumo, qtde_insumo, b_search,b_delete,b_edit,b_add,b_save_add,b_save_edit,b_cancel,img0,img1,img2,img3,img4,img5,img6
