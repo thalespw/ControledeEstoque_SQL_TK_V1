@@ -13,6 +13,8 @@ cursor = conn.cursor()
 from main_window_tk import criar_interface
 window,canvas,background_img ,nome_insumo, lote_insumo, data_insumo, qtde_insumo, b_search,b_delete,b_edit,b_add,b_save_add,b_save_edit,img0,img1,img2,img3,img4,img5 = criar_interface()
 
+window,background_img = criar_interface()
+
 
 def limpar_tela():
     habilitar_campos()
@@ -74,7 +76,7 @@ def abrir_janela_pesquisa():
     janela_pesquisa.geometry("300x200")
     janela_pesquisa.configure(bg="#555555")
     janela_pesquisa.resizable(False, False)
-
+    centralizar_janela(window,300,200)
     # Faz a janela ficar modal e sempre na frente
     janela_pesquisa.transient(window)   # filha da janela principal
     janela_pesquisa.grab_set()          # bloqueia a principal enquanto aberta
@@ -89,7 +91,7 @@ def abrir_janela_pesquisa():
     Label(janela_pesquisa, text="Lote:", fg="#ffffff", bg="#555555").place(x=20, y=90)
     entry_lote = Entry(janela_pesquisa, width=30)
     entry_lote.place(x=20, y=110)
-
+    entry_nome.focus()
     # Função interna que será ligada ao botão "Pesquisar"
    
     def pesquisar():
@@ -110,11 +112,12 @@ def abrir_janela_pesquisa():
             messagebox.showerror("ERRO", f"Produto {nome} não encontrado.")
             return
         limpar_tela()
+        habilitar_campos()
         nome_insumo.insert(0, resultado[0])
         lote_insumo.insert(0, resultado[3])
         qtde_insumo.insert(0, str(resultado[1]))
         data_insumo.set_date(resultado[2])
-
+        desabilitar_campos()
         janela_pesquisa.destroy()
 
     # Botão de pesquisa
@@ -173,12 +176,23 @@ b_delete.config(command=deletar_insumo)
 b_save_add.config(command=salvar_add)
 b_save_edit.config(command=salvar_edit)
     
+def centralizar_janela(janela,largura,altura):
+    #pegar a resolução da tela
+    largura_tela = janela.winfo_screenwidth()
+    altura_tela = janela.winfo_screenheight()
+
+    #calcular posição
+    x = (largura_tela - largura) //2
+    y = (altura_tela - altura) //2
+    #ajustar a tela
+    janela.geometry(f'{largura}x{altura}+{x}+{y}')
 
 
 
 carregar_ultimo()
 
 window.resizable(False, False)
+centralizar_janela(window,711,646)
 window.mainloop()
 
 cursor.close()

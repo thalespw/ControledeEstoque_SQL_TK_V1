@@ -167,4 +167,4 @@ def criar_interface():
         width = 280,
         height = 31)
 
-    return window,canvas,background_img ,nome_insumo, lote_insumo, data_insumo, qtde_insumo, b_search,b_delete,b_edit,b_add,b_save_add,b_save_edit,img0,img1,img2,img3,img4,img5
+    return window,canvas,background_img,nome_insumo, lote_insumo, data_insumo, qtde_insumo, b_search,b_delete,b_edit,b_add,b_save_add,b_save_edit,img0,img1,img2,img3,img4,img5
