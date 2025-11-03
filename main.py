@@ -13,7 +13,6 @@ cursor = conn.cursor()
 from main_window_tk import criar_interface
 window,canvas,background_img ,nome_insumo, lote_insumo, data_insumo, qtde_insumo, b_search,b_delete,b_edit,b_add,b_save_add,b_save_edit,img0,img1,img2,img3,img4,img5 = criar_interface()
 
-window,background_img = criar_interface()
 
 
 def limpar_tela():
@@ -39,7 +38,9 @@ def carregar_ultimo():
 
 def adicionar_insumo():
     limpar_tela()
+    habilitar_campos()
     mostrar_botao_salvar_add()
+    nome_insumo.focus()
     
     
 def deletar_insumo():
@@ -56,7 +57,10 @@ def deletar_insumo():
     """)
     conn.commit()
     messagebox.showinfo("EXCLUSÃO",f"{nome_insumo.get()} excluído com sucesso!")
-    nome_insumo.delete(0,END)
+    habilitar_campos()
+    limpar_tela()
+    carregar_ultimo()
+    desabilitar_campos()
 
 def editar():
     pass
@@ -72,11 +76,11 @@ def salvar_edit():
 def abrir_janela_pesquisa():
     # Cria uma nova janela independente (filha da principal)
     janela_pesquisa = Toplevel(window)
+    centralizar_janela(janela_pesquisa,300,200)
     janela_pesquisa.title("Pesquisar Produto")
-    janela_pesquisa.geometry("300x200")
+    #janela_pesquisa.geometry("300x200")
     janela_pesquisa.configure(bg="#555555")
     janela_pesquisa.resizable(False, False)
-    centralizar_janela(window,300,200)
     # Faz a janela ficar modal e sempre na frente
     janela_pesquisa.transient(window)   # filha da janela principal
     janela_pesquisa.grab_set()          # bloqueia a principal enquanto aberta
@@ -139,6 +143,7 @@ def salvar_add():
     messagebox.showinfo("ADICIONAR",f"{nome_insumo.get()} adicionado com sucesso!")
     esconder_botao_salvar_add()
     limpar_tela()
+    carregar_ultimo()
 
 #########BOTOES SALVAR - MOSTRAR / ESCONDER    
 def mostrar_botao_salvar_add():
